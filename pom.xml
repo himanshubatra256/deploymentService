@@ -52,6 +52,11 @@
 		  <artifactId>jnpm-maven-plugin</artifactId>
      	  <version>1.5</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-java-sdk-sqs</artifactId>
+		    <version>1.12.98</version>
+		</dependency>
 	</dependencies>
 
 	<build>
