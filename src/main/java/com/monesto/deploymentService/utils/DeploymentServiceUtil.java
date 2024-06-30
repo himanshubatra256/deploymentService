@@ -102,7 +102,6 @@ public class DeploymentServiceUtil {
 					
 					//Upload build files to S3 
 					String localFolderPath = getLocalPath(uniqueId);
-					localFolderPath += "/" + getBuildFolderName(localFolderPath);
 					int noOfFilesUploaded = uploadDistFolderToS3(localFolderPath, DIST_DIR + "/" + uniqueId);
 					LOGGER.info("No. of file uploaded: ", noOfFilesUploaded);
 				});
@@ -112,18 +111,6 @@ public class DeploymentServiceUtil {
 				Thread.sleep(10000);
 			}
 		}
-	}
-	
-	
-	private static String getBuildFolderName(String localFolderPath) {
-		LOGGER.info("Fetching the Build folder name.");
-		try {
-			File build = new File(localFolderPath + File.separator + DIST_DIR);
-			if(build.exists()) return DIST_DIR;
-		}catch(Exception e) {
-			LOGGER.error("Expception occured while fetching build folder name", e);
-		}
-		return BUILD;
 	}
 
 
@@ -136,11 +123,11 @@ public class DeploymentServiceUtil {
 		LOGGER.info("Entered inside getLocalPath");
 		File outputFolder = folderCreation();
 		String localFilePath = outputFolder.getAbsolutePath() + File.separator + S3_OUTPUT_DIR + File.separator + projectId;
-		File reactCheck = new File(localFilePath + File.separator + DIST_DIR);
-		if(null != reactCheck && reactCheck.exists()) {
+		File distFolderCheck = new File(localFilePath + File.separator + DIST_DIR);
+		if(null != distFolderCheck && distFolderCheck.exists()) {
 			return localFilePath + File.separator + DIST_DIR;
 		}
-		return localFilePath;
+		return localFilePath + File.separator + BUILD;
 	}
 
 
@@ -247,8 +234,8 @@ public class DeploymentServiceUtil {
 		try {
 			File outputFolder = folderCreation();
 			String projectPath = outputFolder.getAbsolutePath()+ File.separator + S3_OUTPUT_DIR + File.separator + uniqueDeploymentId;
-			List<String> installCommand = Arrays.asList("npm", "install", "react-scripts");
-			createAndRunProcess(projectPath, installCommand);
+//			List<String> installCommand = Arrays.asList("npm", "install", "react-scripts");
+//			createAndRunProcess(projectPath, installCommand);
 
 			List<String> buildCommand = Arrays.asList("npm", "run", "build");
 			createAndRunProcess(projectPath, buildCommand);

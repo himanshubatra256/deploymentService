@@ -3,6 +3,10 @@ FROM openjdk:17-jdk-alpine
 # Install Node.js and npm
 RUN apk update && apk add --no-cache nodejs npm git
 
+# Set working dir & install react
+WORKDIR /app
+RUN npm install -g react-scripts
+
 # Add your JAR and credentials.properties
 ADD target/deploymentService.jar deploymentService.jar
 ADD target/credentials.properties credsFile/credentials.properties
